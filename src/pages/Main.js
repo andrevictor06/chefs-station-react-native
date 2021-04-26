@@ -1,9 +1,10 @@
 import { useNavigation } from '@react-navigation/core';
-import React from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, TouchableOpacity, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, SafeAreaView, View, FlatList, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import MainDestaque from '../components/MainDestaque';
 
-
+/*
 let DATA = [
     {
       id: '001',
@@ -41,111 +42,29 @@ let DATA = [
         image: 'https://i.pinimg.com/736x/d7/6c/c7/d76cc7cdd8eb1b94b37e32ff5d3f220c.jpg',
         tempo: '30 min',
     },
-  ];
+  ];*/
   
-
-  const getDestaquesFromApiAsync = async (param1, param2) => {
-    try {
-        console.log(param1, param2, "param1, param2")
-      let response = await fetch( 'http://192.168.0.112:8080/receitas'  );
-      let json = await response.json();
-      console.log(json, " json")
-      return json;
-    } catch (error) {
-      console.error(error);
-    }
-  };
 export default function Main() {
-    const navigation = useNavigation();
-    getDestaquesFromApiAsync();
-    const Item = ({ item }) => (
-        <TouchableOpacity style={styles.item} onPress={()=> navigation.navigate('receita')}>
-            <View style={styles.center}>
-                <Image style={styles.itemimagem} source={{ uri: item.image  , }} />
-            </View>
-            <View style={styles.itemconteudo}>
-                <Text style={styles.receita}>{item.title}</Text>
-            </View>
-            <View style={styles.itemconteudo}>
-                <Text style={styles.tempo}>{item.tempo}</Text>
-            </View>
-        </TouchableOpacity>
-      );
+    const [isLoading, setLoading] = useState(true);
+    const [data, setData] = useState([]);
 
-    const renderItem = ({ item }) => (
-        <Item item={item} />
-      );
-    
       return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
-                <View style={styles.destaques}>
-                    <View style={styles.cabecalho}>
-                        <Text style={styles.titulo}>Destaques</Text>
-                    </View>
-                    <View style={styles.conteudo}>
-                        <FlatList horizontal showsHorizontalScrollIndicator={false} data={DATA} renderItem={renderItem} keyExtractor={item => item.id} />
-                    </View>
-                    
-                </View>
+                <MainDestaque config={{name: "Destaque", url: "http://192.168.0.120:8080/receitas/destaques"}}/>
 
-                <View style={styles.destaques}>
-                    <View style={styles.cabecalho}>
-                        <Text style={styles.titulo}>Recomendações</Text>
-                    </View>
-                    <View style={styles.conteudo}>
-                        <FlatList horizontal showsHorizontalScrollIndicator={false} data={DATA} renderItem={renderItem} keyExtractor={item => item.id} />
-                    </View>
-                    
-                </View>
-                <View style={styles.destaques}>
-                    <View style={styles.cabecalho}>
-                        <Text style={styles.titulo}>Mais Curtidas</Text>
-                    </View>
-                    <View style={styles.conteudo}>
-                        <FlatList horizontal showsHorizontalScrollIndicator={false} data={DATA} renderItem={renderItem} keyExtractor={item => item.id} />
-                    </View>
-                    
-                </View>
+                <MainDestaque config={{name: "Recomendações", url: "http://192.168.0.120:8080/receitas/recomendacoes"}}/>
 
-                <View style={styles.destaques}>
-                    <View style={styles.cabecalho}>
-                        <Text style={styles.titulo}>Especialidades para o Café da Manhã</Text>
-                    </View>
-                    <View style={styles.conteudo}>
-                        <FlatList horizontal showsHorizontalScrollIndicator={false} data={DATA} renderItem={renderItem} keyExtractor={item => item.id} />
-                    </View>
-                    
-                </View>
+                <MainDestaque config={{name: "Mais Curtidas", url: "http://192.168.0.120:8080/receitas/curtidas"}}/>
 
-                <View style={styles.destaques}>
-                    <View style={styles.cabecalho}>
-                        <Text style={styles.titulo}>Especialidades para o Almoço</Text>
-                    </View>
-                    <View style={styles.conteudo}>
-                        <FlatList horizontal showsHorizontalScrollIndicator={false} data={DATA} renderItem={renderItem} keyExtractor={item => item.id} />
-                    </View>
-                    
-                </View>
+                <MainDestaque config={{name: "Especialidades para o Café da Manhã", url: "http://192.168.0.120:8080/receitas/cafemanha"}}/>
 
-                <View style={styles.destaques}>
-                    <View style={styles.cabecalho}>
-                        <Text style={styles.titulo}>Especialidades para o Lanche da Tarde</Text>
-                    </View>
-                    <View style={styles.conteudo}>
-                        <FlatList horizontal showsHorizontalScrollIndicator={false} data={DATA} renderItem={renderItem} keyExtractor={item => item.id} />
-                    </View>
-                </View>
+                <MainDestaque config={{name: "Especialidades para o Almoço", url: "http://192.168.0.120:8080/receitas/almoco"}}/>
 
-                <View style={styles.destaques}>
-                    <View style={styles.cabecalho}>
-                        <Text style={styles.titulo}>Especialidades para a Janta</Text>
-                    </View>
-                    <View style={styles.conteudo}>
-                        <FlatList horizontal showsHorizontalScrollIndicator={false} data={DATA} renderItem={renderItem} keyExtractor={item => item.id} />
-                    </View>
-                    
-                </View>
+                <MainDestaque config={{name: "Especialidades para o Lanche da Tarde", url: "http://192.168.0.120:8080/receitas/lanche"}}/>
+
+                <MainDestaque config={{name: "Especialidades para o Jantar", url: "http://192.168.0.120:8080/receitas/jantar"}}/>
+
             </ScrollView>
         </SafeAreaView>
       );
@@ -162,9 +81,7 @@ const styles = StyleSheet.create({
         height: 250,
         width: 150,
         borderColor: "#000",
-        borderRadius: 8,
-        borderWidth: 0.5
-
+        borderRadius: 8
     },
     itemconteudo: {
         top: 5,
@@ -200,6 +117,6 @@ const styles = StyleSheet.create({
     itemimagem: {
         width: 140,
         height: 140,
-        borderRadius: 10,
+        borderRadius: 8,
     }
   });
