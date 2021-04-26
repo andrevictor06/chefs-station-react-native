@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, View, FlatList, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 
 export default function MainDestaque(params) {
-    console.log(params, "params")
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
 

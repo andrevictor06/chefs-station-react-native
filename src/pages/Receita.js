@@ -9,9 +9,38 @@ export default function Receita(params) {
   const [receita, setReceita] = useState(null);
 
   useEffect(() => {
-    setLoading(false);
-    setReceita(params.route.params.item);
+    //setLoading(false);
+    //setReceita(params.route.params.item);
+    fetch("http://192.168.0.120:8080/receitas/pesquisar", {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(params.route.params.item)
+    })
+    .then((response) => response.json())
+    .then((json) => {
+      setReceita(json);
+      navigation.setOptions({
+        title: json.title,
+      });
+    })
+    .catch((error) => setReceita(params.route.params.item))
+    .finally(() => setLoading(false));
+
   }, []);
+
+  /*useEffect(() => {
+    while(isLoading){
+      if(receita != null){
+        navigation.setOptions({
+          title: receita.title,
+        })
+      }
+    }
+  }, []);*/
+  
   //console.log(receita, 'receita', params);
   return (
     <SafeAreaView style={styles.container}>
