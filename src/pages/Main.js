@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, SafeAreaView, View, FlatList, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
+
 import { ScrollView } from 'react-native-gesture-handler';
 import MainDestaque from '../components/MainDestaque';
 
@@ -45,27 +46,31 @@ let DATA = [
   ];*/
   
 export default function Main() {
-    const [isLoading, setLoading] = useState(true);
-    const [data, setData] = useState([]);
-
-      return (
+    const [isLoading, setLoading] = useState(false);
+    const [url, setUrl] = useState("http://192.168.0.131:8080");
+    
+    return (
         <SafeAreaView style={styles.container}>
+
+            {isLoading ? <ActivityIndicator size="large" color="#00ff00"/> : (
             <ScrollView>
-                <MainDestaque config={{name: "Destaque", url: "http://192.168.0.120:8080/receitas/destaques"}}/>
 
-                <MainDestaque config={{name: "Recomendações", url: "http://192.168.0.120:8080/receitas/recomendacoes"}}/>
+                <MainDestaque config={{name: "Destaque", url:  url + "/receitas/destaques"}}/>
 
-                <MainDestaque config={{name: "Mais Curtidas", url: "http://192.168.0.120:8080/receitas/curtidas"}}/>
+                <MainDestaque config={{name: "Recomendações", url: url + "/receitas/recomendacoes"}}/>
 
-                <MainDestaque config={{name: "Especialidades para o Café da Manhã", url: "http://192.168.0.120:8080/receitas/cafemanha"}}/>
+                <MainDestaque config={{name: "Mais Curtidas", url: url + "/receitas/curtidas"}}/>
 
-                <MainDestaque config={{name: "Especialidades para o Almoço", url: "http://192.168.0.120:8080/receitas/almoco"}}/>
+                <MainDestaque config={{name: "Especialidades para o Café da Manhã", url: url + "/receitas/cafemanha"}}/>
 
-                <MainDestaque config={{name: "Especialidades para o Lanche da Tarde", url: "http://192.168.0.120:8080/receitas/lanche"}}/>
+                <MainDestaque config={{name: "Especialidades para o Almoço", url: url + "/receitas/almoco"}}/>
 
-                <MainDestaque config={{name: "Especialidades para o Jantar", url: "http://192.168.0.120:8080/receitas/jantar"}}/>
+                <MainDestaque config={{name: "Especialidades para o Lanche da Tarde", url: url + "/receitas/lanche"}}/>
+
+                <MainDestaque config={{name: "Especialidades para o Jantar", url: url + "/receitas/jantar"}}/>
 
             </ScrollView>
+            )}
         </SafeAreaView>
       );
 }

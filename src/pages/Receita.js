@@ -1,17 +1,21 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView } from 'react-native';
+import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { PricingCard, Image } from 'react-native-elements';
+import { Button } from 'react-native-elements/dist/buttons/Button';
+import LinearProgress from 'react-native-elements/dist/linearProgress/LinearProgress';
+import { Overlay } from 'react-native-elements/dist/overlay/Overlay';
 
 export default function Receita(params) {
   const navigation = useNavigation();
 
   const [isLoading, setLoading] = useState(true);
   const [receita, setReceita] = useState(null);
+  const [url, setUrl] = useState("http://192.168.0.131:8080");
 
   useEffect(() => {
-    //setLoading(false);
-    //setReceita(params.route.params.item);
-    fetch("http://192.168.0.120:8080/receitas/pesquisar", {
+    fetch(url + "/receitas/pesquisar", {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -31,30 +35,38 @@ export default function Receita(params) {
 
   }, []);
 
-  /*useEffect(() => {
-    while(isLoading){
-      if(receita != null){
-        navigation.setOptions({
-          title: receita.title,
-        })
-      }
-    }
-  }, []);*/
-  
-  //console.log(receita, 'receita', params);
+  const [visible, setVisible] = useState(false);
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-       <View style={styles.conteudo}>
-      {receita == null ? <ActivityIndicator size="large" color="#00ff00"/> : (
-        <View style={styles.conteudo}>  
-          <View style={styles.center}>
-            <Image style={styles.itemimagem} source={{ uri: receita.image  , }} />
-          </View>
-          <View style={styles.center}>
-            <Text  style={styles.titulo}> {receita.title} </Text>
-          </View>
+      <ScrollView>
+        <LinearProgress color="primary" value={0.5} />
+        <View>
+          <Button title="Open Overlay" onPress={toggleOverlay} />
+
+          <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+          <PricingCard color="#4f9deb" title="Free" price="$0" info={['1 User', 'Basic Support', 'All Core Features']} button={{ title: 'GET STARTED', icon: 'flight-takeoff' }}/>
+          </Overlay>
         </View>
-      )}</View>
+        <PricingCard color="#4f9deb" title="Free" price="$0" info={['1 User', 'Basic Support', 'All Core Features']} button={{ title: 'GET STARTED', icon: 'flight-takeoff' }}/>
+        <PricingCard color="#ff006f" title="Starter" price="$19" info={['10 Users', 'Basic Support', 'All Core Features']} button={{ title: 'GET STARTED', icon: 'flight-takeoff' }}/>
+        
+
+        <View style={styles.conteudo}>
+          {receita == null ? <ActivityIndicator size="large" color="#00ff00"/> : (
+            <View style={styles.conteudo}>  
+              <View style={styles.center}>
+                <Image style={styles.itemimagem} source={{ uri: receita.image}} />
+              </View>
+              <View style={styles.center}>
+                <Text  style={styles.titulo}> {receita.title} </Text>
+              </View>
+            </View>
+          )}</View>
+        </ScrollView>
     </SafeAreaView>
   );
 }

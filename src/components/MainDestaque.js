@@ -1,6 +1,10 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, View, FlatList, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
+import { ActivityIndicator, View, FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Image, Card } from 'react-native-elements';
+import { Button } from 'react-native-elements/dist/buttons/Button';
+import { Divider } from 'react-native-elements/dist/divider/Divider';
+import { Icon } from 'react-native-elements/dist/icons/Icon';
 
 export default function MainDestaque(params) {
     const [isLoading, setLoading] = useState(true);
@@ -24,22 +28,38 @@ export default function MainDestaque(params) {
     const navigation = useNavigation();
 
     const selectedItem = (item) =>{
+        //alert('You tapped the button!')
         navigation.navigate('receita', {
             item : (item.item) ? item.item: item
         })
     }
     const Item = ({ item }) => (
-        <TouchableOpacity style={styles.item} onPress={()=> selectedItem({item})}>
+        <TouchableOpacity onPress={()=> selectedItem({item})}>
+            <Card>
+                <Card.Image source={{uri: item.image}}>
+                    <Text></Text>
+                </Card.Image>
+                <Card.Divider/>
+                <Card.FeaturedSubtitle>
+                    <View style={styles.itemconteudo}>
+                        <Divider style={{ backgroundColor: 'blue' }} />
+                        <Text style={styles.receita}>{item.title}</Text>
+                    </View>
+                </Card.FeaturedSubtitle>
+            </Card>
+        </TouchableOpacity>
+        /*<TouchableOpacity style={styles.item} onPress={()=> selectedItem({item})}>
             <View style={styles.center}>
                 <Image style={styles.itemimagem} source={{ uri: item.image  , }} />
             </View>
             <View style={styles.itemconteudo}>
+                <Divider style={{ backgroundColor: 'blue' }} />
                 <Text style={styles.receita}>{item.title}</Text>
             </View>
             <View style={styles.itemconteudo}>
                 <Text style={styles.tempo}>{item.tempo}</Text>
             </View>
-        </TouchableOpacity>
+        </TouchableOpacity>*/
     );
 
     const renderItem = ({ item }) => (
